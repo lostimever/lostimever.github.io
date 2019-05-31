@@ -105,7 +105,7 @@
 
 <p>并在浏览器上输入地址 <a href="localhost:4000" target="_blank" rel="noopener">localhost:4000</a> 便可预览初始化的博客内容。</p>
 <h2 id="GitHub-1"><a href="#GitHub-1" class="headerlink" title="GitHub"></a>GitHub</h2><h3 id="创建自己的仓库"><a href="#创建自己的仓库" class="headerlink" title="创建自己的仓库"></a>创建自己的仓库</h3><p>进入你的 GitHub 主页，<a href="https://github.com/new" target="_blank" rel="noopener">创建一个新的repository</a>。
-并输入对应的Repository name，请注意：<strong><font color="#DD3B38">必须保持格式<code>&lt;username&gt;.github.io</code>，其中<code>&lt;username&gt;</code>替换成你的 GitHub 账户名</font></strong>，例如：lostimever.github.io<br><img src="./create.jpg" alt="create"></p>
+并输入对应的Repository name，请注意：<strong><font color="#DD3B38">必须保持格式<code>&lt;username&gt;.github.io</code>，其中<code>&lt;username&gt;</code>替换成你的 GitHub 账户名</font></strong>，例如：lostimever.github.io<br><img src="build-your-blog/create.jpg" alt="create"></p>
 <p>点击<strong>Create repository</strong>即可。</p>
 <h2 id="将本地博客上传至GitHub"><a href="#将本地博客上传至GitHub" class="headerlink" title="将本地博客上传至GitHub"></a>将本地博客上传至GitHub</h2><h3 id="修改本地文件"><a href="#修改本地文件" class="headerlink" title="修改本地文件"></a>修改本地文件</h3><p>打开之前新建的hexo文件夹，在根目录下有个<font color="#DD3B38">_config.yml</font>文件，用文本编辑器打开，在最下面找到deploy，修改为：<br><code>deploy:
   type: git
@@ -121,9 +121,8 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo g</span><br><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>
 
 <p>*注意： 笔者安装的hexo的版本为</p>
-<blockquote>
-<p>hexo: 3.8.0<br>hexo-cli: 2.0.0</p>
-</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo: 3.8.0</span><br><span class="line">hexo-cli: 2.0.0</span><br></pre></td></tr></table></figure>
+
 <p>不同的版本之间的配置可能有些许不同，注意查看自己的版本。</p>
 <h2 id="写博客文章"><a href="#写博客文章" class="headerlink" title="写博客文章"></a>写博客文章</h2><h3 id="创建新的文章"><a href="#创建新的文章" class="headerlink" title="创建新的文章"></a>创建新的文章</h3><p>在命令行中输入：<code>hexo new “name”</code>（将name替换成你的文章的标题），<br>然后在<font color="#DD3B38">source/_posts/</font>里就能看到名为<code>name.md</code>的文件了，现在就可以愉快的写博（tu）客（cao）啦。<br>也可以直接在<font color="#DD3B38">source/_posts/</font>里直接新建一个名为<code>name.md</code>的文件，注意开头需加入以下内容：<br> <code>---
    title: name
@@ -149,7 +148,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/31/build-your-blog/" data-id="cjwc6cj2h00009heev77i0y8i" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/05/31/build-your-blog/" data-id="cjwc6j56h0000gwee94v9ncmu" class="article-share-link">Share</a>
       
       
     </footer>
