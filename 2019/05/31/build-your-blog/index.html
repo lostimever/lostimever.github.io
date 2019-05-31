@@ -14,12 +14,12 @@
 <meta property="og:site_name" content="南陈旧梦">
 <meta property="og:description" content="闲来无事，趁着摸鱼时间，使用Hexo和 GitHub搭建出最简单的个人博客。毕竟磨蹭了很久了，苦于自己的技术水平不够，加上日常懒癌发作，终终终于找到了最简单又免费的方式来搭建个人博客，顺带撸出自己的第一个博文。下面就让我们愉（tong）快（ku）的开始吧！ 准备工作环境先安装好以下应用程序：  nodeJs Git  安装过程不再赘述，可自行度娘，安装完毕后，使用npm即可完成Hexo的安装。 1">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://yoursite.com/2019/05/31/build-your-blog/build-your-blog/create.jpg">
-<meta property="og:updated_time" content="2019-05-31T14:25:11.187Z">
+<meta property="og:image" content="http://yoursite.com/2019/05/31/build-your-blog/create.jpg">
+<meta property="og:updated_time" content="2019-05-31T14:32:17.231Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用 Hexo 和 GitHub Pages 搭建一个简单的个人博客">
 <meta name="twitter:description" content="闲来无事，趁着摸鱼时间，使用Hexo和 GitHub搭建出最简单的个人博客。毕竟磨蹭了很久了，苦于自己的技术水平不够，加上日常懒癌发作，终终终于找到了最简单又免费的方式来搭建个人博客，顺带撸出自己的第一个博文。下面就让我们愉（tong）快（ku）的开始吧！ 准备工作环境先安装好以下应用程序：  nodeJs Git  安装过程不再赘述，可自行度娘，安装完毕后，使用npm即可完成Hexo的安装。 1">
-<meta name="twitter:image" content="http://yoursite.com/2019/05/31/build-your-blog/build-your-blog/create.jpg">
+<meta name="twitter:image" content="http://yoursite.com/2019/05/31/build-your-blog/create.jpg">
   
     <link rel="alternate" href="/atom.xml" title="南陈旧梦" type="application/atom+xml">
   
@@ -109,7 +109,9 @@
 
 <p>并在浏览器上输入地址 <a href="localhost:4000" target="_blank" rel="noopener">localhost:4000</a> 便可预览初始化的博客内容。</p>
 <h2 id="GitHub-1"><a href="#GitHub-1" class="headerlink" title="GitHub"></a>GitHub</h2><h3 id="创建自己的仓库"><a href="#创建自己的仓库" class="headerlink" title="创建自己的仓库"></a>创建自己的仓库</h3><p>进入你的 GitHub 主页，<a href="https://github.com/new" target="_blank" rel="noopener">创建一个新的repository</a>。
-并输入对应的Repository name，请注意：<strong><font color="#DD3B38">必须保持格式<code>&lt;username&gt;.github.io</code>，其中<code>&lt;username&gt;</code>替换成你的 GitHub 账户名</font></strong>，例如：lostimever.github.io<br><img src="build-your-blog/create.jpg" alt="create"></p>
+并输入对应的Repository name，请注意：<strong><font color="#DD3B38">必须保持格式<code>&lt;username&gt;.github.io</code>，其中<code>&lt;username&gt;</code>替换成你的 GitHub 账户名</font></strong>，例如：lostimever.github.io</p>
+<img src="/2019/05/31/build-your-blog/create.jpg" title="build-your-blog">
+
 <p>点击<strong>Create repository</strong>即可。</p>
 <h2 id="将本地博客上传至GitHub"><a href="#将本地博客上传至GitHub" class="headerlink" title="将本地博客上传至GitHub"></a>将本地博客上传至GitHub</h2><h3 id="修改本地文件"><a href="#修改本地文件" class="headerlink" title="修改本地文件"></a>修改本地文件</h3><p>打开之前新建的hexo文件夹，在根目录下有个<font color="#DD3B38">_config.yml</font>文件，用文本编辑器打开，在最下面找到deploy，修改为：<br><code>deploy:
   type: git
@@ -136,11 +138,8 @@
 <h3 id="文章中如何插入图片"><a href="#文章中如何插入图片" class="headerlink" title="文章中如何插入图片"></a>文章中如何插入图片</h3><p>Hexo插入图片的方式很多，这里只介绍一种：将图片放在当前文章的目录中。文章的目录可以通过配置<code>_config.yml</code>来生成。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">post_asset_folder: <span class="literal">true</span></span><br></pre></td></tr></table></figure>
 
-<p>将<code>_config.yml</code>文件中的配置项<code>post_asset_folder</code>设为<code>true</code>后，执行命令<code>$ hexo new &quot;name&quot;</code>，在<code>source/_posts</code>中会生成文章<code>name.md</code>和同名文件夹<code>name</code>。将图片资源放在<code>name</code>中，文章就可以使用相对路径引用图片资源了。<br>使用：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![](./image.jpg)</span><br></pre></td></tr></table></figure>
-
-<p>上述是markdown的引用方式，图片只能在文章中显示，但无法在首页中正常显示。<br>如果希望图片在文章和首页中同时显示，可以使用标签插件语法：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% asset_img image.jpg This is an image %&#125;</span><br></pre></td></tr></table></figure>
+<p>将<code>_config.yml</code>文件中的配置项<code>post_asset_folder</code>设为<code>true</code>后，执行命令<code>$ hexo new &quot;name&quot;</code>，在<code>source/_posts</code>中会生成文章<code>name.md</code>和同名文件夹<code>name</code>。将图片资源放在<code>name</code>中，文章就可以引用图片资源了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% asset_img image.jpg document name %&#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="发表文章"><a href="#发表文章" class="headerlink" title="发表文章"></a>发表文章</h2><p>写好文章并保存后，重复 <strong>开始部署</strong> 中的操作即可。</p>
 <h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>建博一时爽，更新如难产。</p>
@@ -152,7 +151,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/05/31/build-your-blog/" data-id="cjwc6j56h0000gwee94v9ncmu" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/05/31/build-your-blog/" data-id="cjwc6sswk0000ureetc11boxq" class="article-share-link">Share</a>
       
       
     </footer>
