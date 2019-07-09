@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    JavaScript 中什么样的继承才是好的继承？ |
+    
+    暮色</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+</head>
+</html>
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-javascriptinherit" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JavaScript 中什么样的继承才是好的继承？
+    </h1>
+  
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/07/09/javascriptinherit/" class="article-date">
+  <time datetime="2019-07-09T01:48:30.000Z" itemprop="datePublished">2019-07-09</time>
+</a>
+        
+      </div>
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>理解对象和继承是我们学习设计模式，甚至是阅读各种框架源码的第一步。上一篇文章，笔者已经把JavaScript对象进行了梳理，今天我们来一起学习继承。</p>
+<a id="more"></a>
+<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><h3 id="原型链"><a href="#原型链" class="headerlink" title="原型链"></a>原型链</h3><p>基本思想：利用原型让一个引用类型继承另一个引用类型的属性和方法，也就是将一个原型对象指向另一个引用类型的实例。<br>Example:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">Parent</span></span>() &#123;</span><br><span class="line">  this.property = <span class="literal">true</span></span><br><span class="line">&#125;</span><br><span class="line">Parent.prototype.getParentValue = () =&gt; this.property</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">Child</span></span>() &#123;</span><br><span class="line">  this.childProperty = <span class="literal">false</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Child.prototype = new Parent()</span><br><span class="line">Child.prototype.getChildValue = () =&gt; this.childProperty</span><br><span class="line"></span><br><span class="line"><span class="built_in">let</span> instance = new Child()</span><br><span class="line">console.log(instance.getParentValue()) // <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<p><code>Child</code> 通过创建 <code>Parent</code> 实例，并将实例赋值给 <code>Child.prototype</code> 的方式，继承了 <code>Parent</code> 。本质是利用实例重写了原型对象。这样，<code>Child.prototype</code> 拥有了 <code>Parent</code> 的全部属性和方法，同时其内部指针也指向了 <code>Parent.prototype</code> 。<br>通过实现原型链，本质上拓展了原型搜索机制。</p>
+<p>添加方法（谨慎）：<br>字类型有时需要重写超类型中的某个方法，或新增超类型中不存在的方法，一定要将给原型添加方法的代码放在被替换原型的语句后面。<br>Example：<br> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">Parent</span></span>() &#123; </span><br><span class="line">    this.property = <span class="literal">true</span>; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Parent.prototype.getParentValue = () =&gt; this.property</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">Child</span></span>() &#123; </span><br><span class="line">    this.childProperty = <span class="literal">false</span>; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//继承了 SuperType </span><br><span class="line">Child.prototype = new Parent();</span><br><span class="line"></span><br><span class="line">//添加新方法 </span><br><span class="line">Child.prototype.getChildValue = () =&gt; this.childProperty</span><br><span class="line"></span><br><span class="line">//重写超类型中的方法 </span><br><span class="line">Child.prototype.getParentValue = () =&gt; <span class="literal">false</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">let</span> instance = new ChildType(); </span><br><span class="line">console.log(instance.getParentValue());   //<span class="literal">false</span></span><br></pre></td></tr></table></figure></p>
+<p>原型链继承存在的问题：</p>
+<ol>
+<li>创建子类型实例时，不能向父类的构造函数中传递参数</li>
+<li>父子构造函数的原型对象之间存在共享问题<br>example：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">Parent</span></span>()&#123; </span><br><span class="line">    this.colors = [<span class="string">"red"</span>, <span class="string">"blue"</span>, <span class="string">"green"</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">Child</span></span>() &#123;&#125;</span><br><span class="line">Child.prototype = new Parent();</span><br><span class="line"></span><br><span class="line"><span class="built_in">let</span> instanceChild = new Child();</span><br><span class="line">instance1.colors.push(<span class="string">"black"</span>);</span><br><span class="line">console.log(instanceChild.colors);   //<span class="string">"red"</span>, <span class="string">"blue"</span>, <span class="string">"green"</span>,<span class="string">"black"</span></span><br><span class="line">//当我们改变colors的时候, 父构造函数的原型对象的也会变化</span><br><span class="line"><span class="built_in">let</span> instanceParent = new Parent();</span><br><span class="line">console.log(instanceParent.colors);   //<span class="string">"red"</span>, <span class="string">"blue"</span>, <span class="string">"green"</span>,<span class="string">"black"</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3><p>基本思想：在子类构造函数的内部，调用父类的构造函数<br>Example:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> Parent(name) &#123;</span><br><span class="line">    this.name = name;</span><br><span class="line">    this.colors = [<span class="string">"red"</span>, <span class="string">"blue"</span>, <span class="string">"green"</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">Child</span></span>() &#123;</span><br><span class="line">    Parent.call(this, <span class="string">"jerry"</span>);  // 继承了 Parent</span><br><span class="line">    this.age = 22;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">let</span> instanceChild = new Child();</span><br><span class="line">instanceChild.colors.push(<span class="string">"black"</span>);</span><br><span class="line">console.log(instanceChild.name);    // jerry</span><br><span class="line">console.log(instanceChild.colors);   //<span class="string">"red"</span>, <span class="string">"blue"</span>, <span class="string">"green"</span>,<span class="string">"black"</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">let</span> instanceParent = new Parent();</span><br><span class="line">console.log(instanceParent.colors);   //<span class="string">"red"</span>, <span class="string">"blue"</span>, <span class="string">"green"</span></span><br></pre></td></tr></table></figure>
+
+<p>构造函数问题：</p>
+<ol>
+<li>方法都在构造函数中定义，因此函数很难复用</li>
+<li>在父类原型对象中定义的方法，子类无法继承</li>
+</ol>
+<h3 id="组合继承"><a href="#组合继承" class="headerlink" title="组合继承"></a>组合继承</h3><p>简单的说：原型链+构造函数<br>基本思想：原型链实现对原型属性和方法的继承，构造函数实现对实例属性的继承<br>Example：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> Parent(name) &#123;</span><br><span class="line">    this.name = name;</span><br><span class="line">    this.colors = [<span class="string">"red"</span>, <span class="string">"blue"</span>, <span class="string">"green"</span>];</span><br><span class="line">&#125;</span><br><span class="line">Parent.prototype.sayName = () =&gt; &#123; console.log(this.name) &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> Child(name, age) &#123;</span><br><span class="line">    Parent.call(this, name);    // 继承属性</span><br><span class="line">    this.age = age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 继承方法</span><br><span class="line">Child.prototype = new Parent();</span><br><span class="line">Child.prototype.constructor = Child;</span><br><span class="line">Child.prototype.sayAge = () =&gt; &#123; console.log(this.age) &#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">let</span> instanceChild = new Child(<span class="string">"jerry"</span>, 23);</span><br><span class="line">instanceChild.colors.push(<span class="string">"black"</span>); </span><br><span class="line">console.log(instanceChild.colors);  //<span class="string">"red"</span>, <span class="string">"blue"</span>, <span class="string">"green"</span>,<span class="string">"black"</span></span><br><span class="line">instanceChild.sayName();        // jerry</span><br><span class="line">instanceChild.sayAge();         // 23</span><br></pre></td></tr></table></figure>
+
+<p>存在问题：</p>
+<ol>
+<li>若再添加一个子类型，给其原型单独添加一个方法，那么其他子类型也同时拥有了这个方法，因为它们都指向同一个父类型的原型</li>
+<li>无论在什么情况下都会调用两次父类的构造函数，我们不得不在调用子类构造函数时，重写这些属性。</li>
+</ol>
+<h3 id="原型式继承"><a href="#原型式继承" class="headerlink" title="原型式继承"></a>原型式继承</h3><p>基本思想： 本质是对继承对象执行了一次浅拷贝。<br>example：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> object(o) &#123;</span><br><span class="line">    <span class="keyword">function</span> <span class="function"><span class="title">F</span></span>() &#123;&#125;</span><br><span class="line">    F.prototype = o;</span><br><span class="line">    <span class="built_in">return</span> new F();</span><br><span class="line">&#125;</span><br><span class="line">// ES5内置了object.create()方法可以以上方法的功能。</span><br><span class="line"><span class="built_in">let</span> parent = &#123;</span><br><span class="line">    name: <span class="string">"jerry"</span>,</span><br><span class="line">    friends: [<span class="string">"marry"</span>, <span class="string">"sandy"</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">let</span> Child1 = object(parent);</span><br><span class="line">Child1.name = <span class="string">"barbie"</span>;</span><br><span class="line">Child1.friends.push(<span class="string">"Rob"</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">let</span> Child2 = object(parent);</span><br><span class="line">Child2.name = <span class="string">"Cos"</span>;</span><br><span class="line">Child2.friends.push(<span class="string">"Linda"</span>);</span><br><span class="line"></span><br><span class="line">console.log(parent.friends);    //<span class="string">"marry"</span>, <span class="string">"sandy"</span>,<span class="string">"Rob"</span>,<span class="string">"Linda"</span></span><br></pre></td></tr></table></figure>
+
+<p>存在问题：</p>
+<ol>
+<li>与原型链继承一样，父子对象之间存在共享问题</li>
+<li>无法实现复用 </li>
+</ol>
+<h3 id="寄生式继承"><a href="#寄生式继承" class="headerlink" title="寄生式继承"></a>寄生式继承</h3><p>基本思路：在原型式继承外面套了一层函数，在该函数内部增强对象。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> object(o) &#123;</span><br><span class="line">    <span class="keyword">function</span> <span class="function"><span class="title">F</span></span>() &#123;&#125;</span><br><span class="line">    F.prototype = o;</span><br><span class="line">    <span class="built_in">return</span> new F();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 壳子</span><br><span class="line"><span class="keyword">function</span> createAnother(original) &#123;</span><br><span class="line">    <span class="built_in">let</span> <span class="built_in">clone</span> = object(original);</span><br><span class="line">    clone.sayHi = () =&gt; &#123; console.log(<span class="string">"Hi"</span>) &#125;</span><br><span class="line">    <span class="built_in">return</span> <span class="built_in">clone</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>存在问题：</p>
+<ol>
+<li>复用率贼低</li>
+</ol>
+<h3 id="寄生组合式继承"><a href="#寄生组合式继承" class="headerlink" title="寄生组合式继承"></a>寄生组合式继承</h3><p>基本思想： 利用构造函数来继承属性，利用原型链的混成形式来继承方法。<br>example:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> object(o) &#123;</span><br><span class="line">    <span class="keyword">function</span> <span class="function"><span class="title">F</span></span>() &#123;&#125;</span><br><span class="line">    F.prototype = o;</span><br><span class="line">    <span class="built_in">return</span> new F();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> inheritPrototype(child, parent) &#123;</span><br><span class="line">    <span class="built_in">let</span> prototype = object(parent.prototype)</span><br><span class="line">    prototype.constructor = child;</span><br><span class="line">    child.prototype = prototype;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> Parent(name) &#123;</span><br><span class="line">    this.name = name;</span><br><span class="line">    this.colors = [<span class="string">"red"</span>, <span class="string">"blue"</span>, <span class="string">"green"</span>];</span><br><span class="line">&#125;</span><br><span class="line">Parent.prototype.sayName = () =&gt; &#123; console.log(this.name) &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> Child(name, age) &#123;</span><br><span class="line">    Parent.call(this, name);    // 继承属性</span><br><span class="line">    this.age = age;</span><br><span class="line">&#125;</span><br><span class="line">inheritPrototype(Child, Parent)</span><br><span class="line"></span><br><span class="line">Child.prototype.sayAge = () =&gt; this.age</span><br></pre></td></tr></table></figure>
+
+<p>目前来说，这是最好的继承方式。</p>
+<h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>懒癌发作，明明早就写好了，一直把他丢弃在电脑硬盘里。几周之后，我挣扎着打开MWeb，稍做修葺，赶个结束语。算是画上一个句号吧。最后，不得不说，高级3，真是一本不可多得的好书，把对象、继承讲得如此清晰明了。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>《JavaScript高级程序设计》第3版</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/07/09/javascriptinherit/" data-id="cjxv5rgvw00021b6jxkh7lqhx" class="article-share-link">Share</a>
+      
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+    
+      <a href="/2019/06/13/创建JavaScript对象/" class="article-nav-link">
+        <strong class="article-nav-caption">Olde posts</strong>
+        <div class="article-nav-title">你对JavaScript面向对象了解多少？</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2019 暮色</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="暮色"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">Home</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">Archives</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">About</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+      <li class="nav-item">
+          <div class="totop" id="totop">
+    <i class="fe fe-rocket"></i>
+</div>
+      </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+<script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/search.js"></script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>
